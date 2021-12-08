@@ -91,14 +91,14 @@ axios({
 // })
 //
 //
-// const paramsString = 'q=URLUtils.searchParams&topic=api'
-// const searchParams = new URLSearchParams(paramsString)
-//
-// axios({
-//   method: 'post',
-//   url: '/base/post',
-//   data: searchParams
-// })
+const paramsString = 'q=URLUtils.searchParams&topic=api'
+const searchParams = new URLSearchParams(paramsString)
+
+axios({
+  method: 'post',
+  url: '/base/post',
+  data: searchParams
+})
 
 // axios({
 //   method: 'post',
