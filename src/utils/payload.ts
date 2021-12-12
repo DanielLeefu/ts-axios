@@ -6,3 +6,15 @@ export const buildPayload = (data: any): any => {
   }
   return data
 }
+
+export const autoTransfrom = (val: any): any => {
+  if (typeof val === 'string') {
+    try {
+      val = JSON.parse(val)
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  return val
+}

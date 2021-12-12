@@ -1,4 +1,3 @@
-import { type } from 'os'
 import { isData, isPlainObject } from './index'
 
 export const encode = (val: string): string => {
