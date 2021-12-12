@@ -22,3 +22,25 @@ export function buildHeaders(headers: any, data: any): any {
 
   return headers
 }
+
+export const headerStringToObj = (val: string): Object => {
+  const parser = Object.create(null)
+
+  if (!val) return parser
+
+  val.split('\r\n').forEach(item => {
+    let [key, values] = item.split(':')
+
+    key = key.trim().toLowerCase()
+
+    if (!key) return
+
+    if (values) {
+      values = values.trim()
+    }
+
+    parser[key] = values
+  })
+
+  return parser
+}
