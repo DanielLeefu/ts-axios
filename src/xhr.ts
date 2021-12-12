@@ -1,6 +1,7 @@
-import { rejects } from 'assert'
 import { AxiosConfigRequest, AxiosPromise, AxiosResponse } from './types'
 import { headerStringToObj } from './utils/header'
+
+import { createError } from './utils/error'
 
 const xhr = (config: AxiosConfigRequest): AxiosPromise => {
   return new Promise((resolve, reject) => {
@@ -47,10 +48,11 @@ const xhr = (config: AxiosConfigRequest): AxiosPromise => {
 
     request.onerror = function handleError() {
       reject(new Error('网络错误'))
+      reject(createError('Network Error', config, null, request))
     }
 
     request.ontimeout = function handlTimeout() {
-      reject(new Error(`time out ${timeout}`))
+      reject(createError(`time out ${timeout}`, config, 'ERROR', request))
     }
 
     Object.keys(headers).forEach(name => {
