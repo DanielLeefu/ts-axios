@@ -1,9 +1,11 @@
-import { AxiosConfigRequest, AxiosPromise, AxiosResponse } from './types'
-import { headerStringToObj } from './utils/header'
+import { AxiosConfigRequest, AxiosPromise, AxiosResponse } from '../types'
+import { headerStringToObj } from '../utils/header'
+
+import { createError } from '../utils/error'
 
 const xhr = (config: AxiosConfigRequest): AxiosPromise => {
-  return new Promise(resolve => {
-    const { data = null, url, method = 'get', headers, responseType } = config
+  return new Promise((resolve, reject) => {
+    const { data = null, url, method = 'get', headers, responseType, timeout } = config
 
     const request = new XMLHttpRequest()
 
@@ -11,10 +13,19 @@ const xhr = (config: AxiosConfigRequest): AxiosPromise => {
       request.responseType = responseType
     }
 
+    if (timeout) {
+      request.timeout = timeout
+    }
+
     request.open(method.toUpperCase(), url, true)
 
     request.onreadystatechange = function handleLoad() {
       if (request.readyState !== 4) {
+        return
+      }
+
+      // 网路错误或者超市错误，状态为0
+      if (request.status === 0) {
         return
       }
 
@@ -32,7 +43,16 @@ const xhr = (config: AxiosConfigRequest): AxiosPromise => {
         request
       }
 
-      resolve(response)
+      handleResponse(response)
+    }
+
+    request.onerror = function handleError() {
+      reject(new Error('网络错误'))
+      reject(createError('Network Error', config, null, request))
+    }
+
+    request.ontimeout = function handlTimeout() {
+      reject(createError(`time out ${timeout}`, config, 'ERROR', request))
     }
 
     Object.keys(headers).forEach(name => {
@@ -44,6 +64,15 @@ const xhr = (config: AxiosConfigRequest): AxiosPromise => {
     })
 
     request.send(data)
+
+    // 错误处理逻辑
+    const handleResponse = (response: AxiosResponse): void => {
+      if (response.status >= 200 && response.status < 300) {
+        resolve(response)
+      } else {
+        reject(new Error(`请求失败${response.status}`))
+      }
+    }
   })
 }
 
