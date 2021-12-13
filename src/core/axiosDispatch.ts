@@ -1,9 +1,9 @@
-import { AxiosConfigRequest, AxiosPromise } from './types'
+import { AxiosConfigRequest, AxiosPromise } from '../types'
 import xhr from './xhr'
-import { buildURL } from './utils/url'
-import { buildPayload } from './utils/payload'
-import { buildHeaders } from './utils/header'
-import { autoTransfrom } from './utils/payload'
+import { buildURL } from '../utils/url'
+import { buildPayload } from '../utils/payload'
+import { buildHeaders } from '../utils/header'
+import { autoTransfrom } from '../utils/payload'
 
 const transformURL = (config: AxiosConfigRequest): string => {
   const { url, params } = config
@@ -26,7 +26,7 @@ const processConfig = (config: AxiosConfigRequest): void => {
   config.data = transformData(config)
 }
 
-const axios = (config: AxiosConfigRequest): AxiosPromise => {
+export const axiosDispatch = (config: AxiosConfigRequest): AxiosPromise => {
   processConfig(config)
   return xhr(config).then(res => {
     const { data } = res
@@ -36,5 +36,3 @@ const axios = (config: AxiosConfigRequest): AxiosPromise => {
     }
   })
 }
-
-export default axios

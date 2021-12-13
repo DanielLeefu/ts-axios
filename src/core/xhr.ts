@@ -1,7 +1,7 @@
-import { AxiosConfigRequest, AxiosPromise, AxiosResponse } from './types'
-import { headerStringToObj } from './utils/header'
+import { AxiosConfigRequest, AxiosPromise, AxiosResponse } from '../types'
+import { headerStringToObj } from '../utils/header'
 
-import { createError } from './utils/error'
+import { createError } from '../utils/error'
 
 const xhr = (config: AxiosConfigRequest): AxiosPromise => {
   return new Promise((resolve, reject) => {

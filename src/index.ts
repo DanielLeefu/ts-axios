@@ -1,5 +1,5 @@
-import axios from './axios'
+import Axios from './createAxios'
 
 export * from './types/index'
 
-export default axios
+export default Axios
